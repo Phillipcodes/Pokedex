@@ -1,0 +1,124 @@
+body {
+    margin: 0;
+    font-family:Barlow;
+}
+
+.max-width {
+    margin: auto;
+    max-width: 1920px;
+}
+
+.d-flex-space-btw {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+h1 {
+    font-size: 58px;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #3264AF;
+    color: #FFCC01;
+}
+
+header {
+    background-color: rgb(77, 228, 228);
+    border-radius: 8px;
+    
+  
+}
+
+
+
+.poke-name {
+    display: flex;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    
+
+}
+
+
+.poke-body {
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+
+}
+
+.pokecard {
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    width: 16%;
+    border: 3px solid #060607;
+   
+}
+
+.poke-type {
+    border-radius: 8px;
+   margin-bottom: 8px;
+   background-color: whitesmoke;
+   padding: 8px;
+   height: 12px;
+   width: 40px;
+   
+}
+
+.main-content {
+    margin: 0 ;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.center-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.poke-body img {
+    width: 100%;
+
+    
+}
+
+.pokecard {
+    transition: 0.7s;
+}
+
+.pokecard:hover {
+    transform: scale(1.2);
+}
+
+.poke-name h2 {
+    color: #060607;
+    width: 140px;
+    
+}
+.center-number {
+    color: #060607;
+    background-color: whitesmoke;
+    border-radius: 50%;
+    padding: 2px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.display-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 16px;
+    width: 100%;
+}
