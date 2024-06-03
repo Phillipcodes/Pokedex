@@ -1,81 +1,73 @@
-let BASE_URL = "https://pokeapi.co/api/v2/pokemon?limit=151&offset=0";
+let loadedPokemon = []; // Globale Variable zum Speichern der geladenen Pokémon
+let pokemonPackage = 0;
+let pokemonImg = [];
 
-function init() {
-  fetchPokemonData();
+
+  function init() {
+   getPokemonData();
+
 }
 
-async function fetchPokemonData() {
-  try {
-    let pokemon = await fetch(
-      "https://pokeapi.co/api/v2/pokemon?limit=151&offset=0"
-    );
-
-    if (!pokemon.ok) {
-      throw new Error("Something went wrong.");
-    }
-
-    let pokemonAsJson = await pokemon.json();
-    await getPokemonData(pokemonAsJson.results);
-    console.log(pokemonAsJson);
-  } catch (error) {
-    console.log("we went into an error.");
-  }
-}
-
-async function getPokemonData(pokemonAsJson) {
-  for (let i = 0; i < 12; i++) {
-    let pokemonName = pokemonAsJson[i]["name"];
+async function getPokemonData() {
+  for (let i = pokemonPackage +1 ; i < pokemonPackage +25; i++) {
     try {
-      let pokemonInfo = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
-      );
-
-      if (!pokemonInfo.ok) {
+      let pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+      let baseImgUrl =  await fetch (`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png`);
+      if (!pokemonResponse.ok) {
         throw new Error("Something went wrong.");
       }
-
-      let pokemonInfoAsJson = await pokemonInfo.json();
-      renderPokemonData(pokemonName, i + 1, pokemonInfoAsJson.types);
-      console.log(pokemonInfoAsJson);
+      
+      let pokemonData = await pokemonResponse.json();
+      
+      pokemonImg.push(baseImgUrl)
+      loadedPokemon.push(pokemonData); // Pokémon zur Liste der geladenen Pokémon hinzufügen
     } catch (error) {
-      console.log("we went into an error.");
+      console.log("Es ist ein Fehler aufgetreten.");
     }
   }
+
+  renderPokemonData()
+  pokemonPackage += 24;
+
 }
 
-function renderPokemonData(pokemonName, index, types) {
-  let baseImgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${index}.png`;
-  let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)
-  let pokeTypesHTML = "";
-  let pokeTyp = types[0].type.name;
-  for(let j = 0; j < types.length; j++) {
-    let pokeTyp = types[j].type.name;
-    let UppercasePokeType = pokeTyp.charAt(0).toUpperCase() + pokeTyp.slice(1)
-    pokeTypesHTML += `<span class="poke-type ${pokeTyp}1 center-text font-bold">${UppercasePokeType}</span> `
+function renderPokemonData() {
+  let mainContent = document.getElementById("main_content");
+  for (let z = pokemonPackage; z < loadedPokemon.length; z++) {
+    let pokemon = loadedPokemon[z];
+    let pokemonName = pokemon.name;
+    let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
+    let pokeTypesHTML = "";
+    
+    for (let j = 0; j < pokemon.types.length; j++) {
+      let pokeType = pokemon.types[j].type.name;
+      let uppercasePokeType = pokeType.charAt(0).toUpperCase() + pokeType.slice(1);
+      pokeTypesHTML += `<span class="poke-type ${pokeType}1 center-text font-bold">${uppercasePokeType}</span> `;
+    }
+    let pokeTypeClass = pokemon.types[0].type.name;
+    let pokeHtml = renderPokemonDataHTML(uppercasePokemonName,  z+ 1 , z, pokeTypesHTML,pokeTypeClass);
+    mainContent.innerHTML += pokeHtml;
   }
-  
-  
-  let pokeHtml =  renderPokemonDataHTML(uppercasePokemonName,baseImgUrl,index,pokeTyp,pokeTypesHTML )
-
-  document.getElementById("main_content").innerHTML += pokeHtml
-
-  
 }
 
-
-function renderPokemonDataHTML(pokeName, imageUrl, id, pokeType,pokeTypesHTML ) {
+function renderPokemonDataHTML(pokeName,  id, imgId, pokeTypesHTML,pokeTypeClass) {
+  
   return `<div class="pokecard">
-    <div id="poke_name" class="poke-name center-text ${pokeType}">
+    <div id="poke_name" class="poke-name center-text ${pokeTypeClass} ">
       <div class="display-row">
         <h2>${pokeName}</h2>
         <div class="center-number">${id}</div>
       </div>
-      <div id="poke_body" class="poke-body ${pokeType}">
-        <img src="${imageUrl}" alt="">
+      <div id="poke_body" class="poke-body">
+        <img src="${pokemonImg[imgId].url}" alt="">
       </div>
-      <div id="poke_type" class=" center-text font-bold">
-      ${pokeTypesHTML}
+      <div id="poke_type" class="center-text font-bold">
+        ${pokeTypesHTML}
       </div>
     </div>
   </div>`;
+}
+
+function loadMorePokemon() {
+  getPokemonData(); // Weitere Pokémon laden
 }
