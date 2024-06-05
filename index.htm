@@ -3,15 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="fonts.css" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="PokeColorbackground.css" />
     <script src="scrips.js"></script>
     <title>Pokédex</title>
   </head>
-  <body onload="init()">
-   
-    <header>
+  <body id="body" class="" onload="init()">
+    <div
+      id="single_card_background"
+      class="single-card-background d-none"
+    ></div>
+    <header id="header">
       <nav>
         <div class="d-flex-space-btw">
           <h1>Pokédex</h1>
@@ -19,16 +22,17 @@
         </div>
       </nav>
     </header>
-    <button onclick="loadMorePokemon()"> Load</button>
-    <div class="max-width">
-    <section id="main_content" class="main-content">
-     
+    
+    
+      <div class="single-pokemon-card-container" id="single_pokemon_card_container">
 
-
-
-   
-
-    </section>
-    </div>
+      </div>
+      <div class="max-width">
+        <section id="main_content" class="main-content"></section>
+      </div>
+    
+    <button onclick="loadMorePokemon()">Load</button>
   </body>
 </html>
+
+

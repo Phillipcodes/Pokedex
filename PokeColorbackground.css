@@ -238,6 +238,151 @@
     background-color: #A890F0; /* Lavender */
   }
 
+  .grass2 {
+    background-color: #567a38; /* Dunkleres Grün */
+}
+
+.fire2 {
+    background-color: #b85e1e; /* Dunkleres Orange */
+}
+
+.water2 {
+    background-color: #4c67a5; /* Dunkleres Blau */
+}
+
+.bug2 {
+    background-color: #727a13; /* Dunkleres Oliv */
+}
+
+.normal2 {
+    background-color: #767658; /* Dunkleres Beige */
+}
+
+.electric2 {
+    background-color: #bfa026; /* Dunkleres Gelb */
+}
+
+.poison2 {
+    background-color: #732d73; /* Dunkleres Lila */
+}
+
+.fairy2 {
+    background-color: #b87075; /* Dunkleres Pink */
+}
+
+.ground2 {
+    background-color: #a88a4a; /* Dunkleres Tan */
+}
+
+.fighting2 {
+    background-color: #8c211d; /* Dunkleres Rot */
+}
+
+.psychic2 {
+    background-color: #b63a62; /* Dunkleres Pinkish */
+}
+
+.rock2 {
+    background-color: #877628; /* Dunkleres Braun */
+}
+
+.ghost2 {
+    background-color: #4d3b63; /* Dunkleres Purple-ish */
+}
+
+.ice2 {
+    background-color: #649595; /* Dunkleres Hellblau */
+}
+
+.dragon2 {
+    background-color: #4b22a0; /* Dunkleres Blau */
+}
+
+.dark2 {
+    background-color: #49362f; /* Dunkleres Dunkelbraun */
+}
+
+.steel2 {
+    background-color: #7d7d93; /* Dunkleres Grau */
+}
+
+.flying2 {
+    background-color: #7460a2; /* Dunkleres Lavendel */
+}
+
+.grass3 {
+  background-color: #8cd664; /* Helleres Grün */
+}
+
+.fire3 {
+  background-color: #ff944d; /* Helleres Orange */
+}
+
+.water3 {
+  background-color: #85a8ff; /* Helleres Blau */
+}
+
+.bug3 {
+  background-color: #c0cc37; /* Helleres Oliv */
+}
+
+.normal3 {
+  background-color: #cccc8c; /* Helleres Beige */
+}
+
+.electric3 {
+  background-color: #ffe066; /* Helleres Gelb */
+}
+
+.poison3 {
+  background-color: #c85cc8; /* Helleres Lila */
+}
+
+.fairy3 {
+  background-color: #ffc0cc; /* Helleres Pink */
+}
+
+.ground3 {
+  background-color: #f0dc84; /* Helleres Tan */
+}
+
+.fighting3 {
+  background-color: #ff6256; /* Helleres Rot */
+}
+
+.psychic3 {
+  background-color: #ff92b0; /* Helleres Pinkish */
+}
+
+.rock3 {
+  background-color: #dcc14d; /* Helleres Braun */
+}
+
+.ghost3 {
+  background-color: #8c6ab5; /* Helleres Purple-ish */
+}
+
+.ice3 {
+  background-color: #c0f2f2; /* Helleres Hellblau */
+}
+
+.dragon3 {
+  background-color: #9070ff; /* Helleres Blau */
+}
+
+.dark3 {
+  background-color: #8c7262; /* Helleres Dunkelbraun */
+}
+
+.steel3 {
+  background-color: #e0e0ff; /* Helleres Grau */
+}
+
+.flying3 {
+  background-color: #c0a3ff; /* Helleres Lavendel */
+}
+
+  
   .grass1 {
     color: #78C850; /* Green */
 }
