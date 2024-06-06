@@ -1,7 +1,13 @@
 body {
     margin: 0;
     font-family:Barlow;
-    
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .no-scroll {
@@ -184,13 +190,13 @@ header {
     background-color: blanchedalmond;
     height: 56%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center
 }
 
 .single-pokemon-card-img img  {
-    height: 65%;
-    width: auto;
+    height: 55%;
+    width: 55%;
 }
 
 .pokemon-stats-container {
@@ -283,7 +289,15 @@ header {
 }
 
 
+#click-forward {
+    font-size: 34px;
+    font-weight: bold;
+}
 
+#click-backward {
+    font-size: 34px;
+    font-weight: bold;
+}
 
 @media screen and (max-width: 1600px) {
     .single-pokemon-card {

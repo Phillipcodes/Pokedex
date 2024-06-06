@@ -13,11 +13,13 @@
     <div
       id="single_card_background"
       class="single-card-background d-none"
+      onclick="closePokemonCarrd()"
     ></div>
     <header id="header">
       <nav>
         <div class="d-flex-space-btw">
           <h1>Pokédex</h1>
+       
           <input type="text" placeholder="Search.." />
         </div>
       </nav>
@@ -25,13 +27,15 @@
     
     
       <div class="single-pokemon-card-container" id="single_pokemon_card_container">
-
+     
       </div>
+    
       <div class="max-width">
         <section id="main_content" class="main-content"></section>
       </div>
     
     <button onclick="loadMorePokemon()">Load</button>
+    
   </body>
 </html>
 

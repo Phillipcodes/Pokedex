@@ -2,12 +2,14 @@ let loadedPokemon = []; // Globale Variable zum Speichern der geladenen Pokémon
 let pokemonPackage = 0;
 let pokemonImg = [];
 let pokeImgGif = [];
+let lastRenderedIndex = 0;
 
 
 
-
-  function init() {
-   getPokemonData();
+ async function init() {
+    loadingSpinner () 
+   await getPokemonData();
+   disableLoadingSpinner()
 
 }
 
@@ -35,9 +37,22 @@ async function getPokemonData() {
 
 }
 
+
+function loadingSpinner () {
+  document.getElementById('body').innerHTML += `
+    <div id="loading_spiner">hello world </div>`;
+
+}
+
+function disableLoadingSpinner() {
+  document.getElementById('loading_spiner').classList.add('d-none')
+}
+
 function renderPokemonData() {
   let mainContent = document.getElementById("main_content");
-  for (let z = pokemonPackage; z < loadedPokemon.length; z++) {
+ 
+
+  for (let z = lastRenderedIndex; z < loadedPokemon.length; z++) {
     let pokemon = loadedPokemon[z];
     let pokemonName = pokemon.name;
     let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
@@ -52,6 +67,8 @@ function renderPokemonData() {
     let pokeHtml = renderPokemonDataHTML(uppercasePokemonName,  z+ 1 , z, pokeTypesHTML,pokeTypeClass);
     mainContent.innerHTML += pokeHtml;
   }
+  lastRenderedIndex = loadedPokemon.length;
+
 }
 
 function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pokeTypeClass) {
@@ -74,6 +91,7 @@ function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pok
 
 function loadMorePokemon() {
   getPokemonData(); // Weitere Pokémon laden
+
 }
 
 
@@ -110,15 +128,19 @@ function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeGif,pokeTypeBa
     <div class="center-name">${uppercasePokemonName}</div>
     <div class="round-background">${id+1}</div>
   </div>
-  <div class="single-pokemon-card-img ${pokeTypeBackground}"> <img src="${pokeGif.url}"></div>
+  <div class="single-pokemon-card-img ${pokeTypeBackground}">
+        <div onclick="previousPokemon(${id})" id="click-forward"> <</div>
+        <img src="${pokeGif.url}">
+        <div onclick="nextPokemon(${id})" id="click-backward"> > </div>
+      
+  </div>
   <div class="pokemon-stats-container ${pokeTypeBackground+"2"}">
     <div class="stat-line">
-      <div id="close_up_info_btn_1">Stats</div>
+      <div onclick="openStatsTab(event)" id="close_up_info_btn_1">Stats</div>
       <div id="close_up_info_btn_2">Moves</div>
       <div id="close_up_info_btn_3">Info</div>
     </div>
     <div class="seperator"></div>
-
     <div id="poke_stats" class="stats-information">
       <ul>
         <li class="base-stats-item">
@@ -152,5 +174,35 @@ function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeGif,pokeTypeBa
   
 }
 
+function closePokemonCarrd() {
+  document.getElementById('single_card_background').classList.add('d-none');
+  document.getElementById('main_content').classList.remove('blur');
+  document.getElementById('single_pokemon_card').classList.add('d-none')
+  document.getElementById('header').classList.remove('blur');
+}
+ 
 
+async function nextPokemon(id) {
+  if (id < loadedPokemon.length - 1) { // Wenn es ein nächstes Pokémon gibt
+    id = id + 1; // Erhöhe die ID, um das nächste Pokémon anzuzeigen
+    openSinglePokemonCard(id);
+  } else { // Wenn das Ende der geladenen Pokémon erreicht ist
+    await getPokemonData(); // Lade weitere Pokémon
+    id = id + 1; // Inkrementiere die ID
+    openSinglePokemonCard(id); // Öffne das nächste Pokémon
+  }
+}
+
+function previousPokemon(id) {
+  if (id > 0) { // wenn i im array kleiner 0 ist dann öffne nächsts bild von i länge minus 1 also rückwärts
+    openSinglePokemonCard(id - 1);
+  } else { // wenn nicht ist i = images-length -1 sprich er ist dann beim näcshten klick von null auf 15
+    id = loadedPokemon.length - 1;
+    openSinglePokemonCard(id);
+  }
   
+}
+
+function openStatsTab(event) {
+  event.stopPropagation();
+}
