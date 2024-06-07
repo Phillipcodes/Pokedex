@@ -2,26 +2,47 @@ let loadedPokemon = []; // Globale Variable zum Speichern der geladenen Pokémon
 let pokemonPackage = 0;
 let pokemonImg = [];
 let pokeImgGif = [];
-let currentPokemonNames = [];
 let lastRenderedIndex = 0;
 
-
-
- async function init() {
-    loadingSpinner () 
-   await getPokemonData();
-   disableLoadingSpinner()
-   currentPokemonNames = loadedPokemon;
+async function init() {
+  loadingSpinner();
+  await getPokemonData();
+  disableLoadingSpinner();
 
 }
 
-
 function searchPokemonName() {
-  let search = document.getElementById('search').value
+  let search = document.getElementById('search').value;
   search = search.toLowerCase();
-  let pokemonCard = document.getElementById('main_content');
-  pokemonCard.innerHTML = "";
-console.log(search);
+  let mainContent = document.getElementById("main_content");
+
+  // Reset the content and the lastRenderedIndex
+  document.getElementById('btn').classList.add('d-none')
+  mainContent.innerHTML = '';
+  lastRenderedIndex = 0;
+
+  if(search === "") {
+    document.getElementById('btn').classList.remove('d-none')
+  }
+
+  for (let z = 0; z < loadedPokemon.length; z++) {
+    let pokemon = loadedPokemon[z];
+    let pokemonName = pokemon.name;
+    let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
+    let pokeTypesHTML = "";
+    
+    if (pokemonName.toLowerCase().startsWith(search)) {
+      for (let j = 0; j < pokemon.types.length; j++) {
+        let pokeType = pokemon.types[j].type.name;
+        let uppercasePokeType = pokeType.charAt(0).toUpperCase() + pokeType.slice(1);
+        pokeTypesHTML += `<span class="poke-type ${pokeType}1 center-text font-bold">${uppercasePokeType}</span> `;
+      }
+      let pokeTypeClass = pokemon.types[0].type.name;
+      let pokeHtml = renderPokemonDataHTML(uppercasePokemonName, z + 1, z, pokeTypesHTML, pokeTypeClass);
+      mainContent.innerHTML += pokeHtml;
+    }
+  }
+  lastRenderedIndex = loadedPokemon.length;
 }
 
 async function getPokemonData() {
@@ -37,7 +58,7 @@ async function getPokemonData() {
       pokemonImg.push(baseImgUrl)
       pokeImgGif.push(baseGifUrl)
       loadedPokemon.push(pokemonData); // Pokémon zur Liste der geladenen Pokémon hinzufügen
-      currentPokemonNames.push(pokemonData.name)
+      
     } catch (error) {
       console.log("Es ist ein Fehler aufgetreten.");
     }
@@ -59,6 +80,8 @@ function loadingSpinner () {
    `
    if(loadedPokemon.length === 0) {
     document.getElementById('header').classList.add('d-none')
+    document.getElementById('btn-container').classList.add('d-none')
+    
    }
    
 
@@ -71,6 +94,7 @@ function disableLoadingSpinner() {
   document.getElementById('header').classList.add('d-none')
   document.getElementById('header').classList.remove('d-none');
   document.getElementById('single_card_background').classList.add('d-none');
+  document.getElementById('btn-container').classList.remove('d-none')
  
   
 }
@@ -84,6 +108,7 @@ function renderPokemonData() {
     let pokemonName = pokemon.name;
     let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
     let pokeTypesHTML = "";
+    
     
     for (let j = 0; j < pokemon.types.length; j++) {
       let pokeType = pokemon.types[j].type.name;
@@ -113,13 +138,15 @@ function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pok
         ${pokeTypesHTML}
       </div>
     </div>
-  </div>`;
+  </div>
+  `;
 }
 
  async function loadMorePokemon() {
-  loadingSinnerForLoadManually();
+  
+  loadAnimationSpinnerBtn();
  await getPokemonData(); // Weitere Pokémon laden
- disableLoadingSpinner()
+ disableLoadingSpinnerAnimationBtn();
 
 }
 
@@ -148,6 +175,9 @@ function openSinglePokemonCard(id) {
   document.getElementById('body').classList.add('no-scroll')
   renderSinglePokemonCard(id)
   blurBackground ()
+  renderStatsInfoAtStart(id)
+  
+  
 }
 
 function renderSinglePokemonCard(id) {
@@ -156,6 +186,7 @@ function renderSinglePokemonCard(id) {
   let pokeGif = pokeImgGif[id];
   let pokeyTypeBG = loadedPokemon[id].types[0].type.name;
   document.getElementById('single_pokemon_card_container').innerHTML = renderSinglePokemonCardHTML(id,uppercasePokemonName, pokeGif,pokeyTypeBG)
+ 
 }
 
 function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeGif,pokeTypeBackground) {
@@ -173,38 +204,13 @@ function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeGif,pokeTypeBa
   </div>
   <div class="pokemon-stats-container ${pokeTypeBackground+"2"}">
     <div class="stat-line">
-      <div onclick="openStatsTab(event)" id="close_up_info_btn_1">Stats</div>
-      <div id="close_up_info_btn_2">Moves</div>
-      <div id="close_up_info_btn_3">Info</div>
+      <div  onclick="renderStatsInfo(renderPokeStats(${id}),${id})" onclick="openStatsTab(event)" id="close_up_info_btn_1">Stats</div>
+      <div  onclick="renderStatsInfo(renderMoves(${id}),${id})" id="close_up_info_btn_2">Moves</div>
+      <div  onclick="renderStatsInfo(renderAboutPokemon(${id}),${id})"id="close_up_info_btn_3">Info</div>
     </div>
     <div class="seperator"></div>
-    <div id="poke_stats" class="stats-information">
-      <ul>
-        <li class="base-stats-item">
-          <span class="base-stat-name">HP</span>
-          <span class="base-stat-number">100</span>
-        </li>
-        <li class="base-stats-item">
-          <span class="base-stat-name">Attack</span>
-          <span class="base-stat-number">120</span>
-        </li>
-        <li class="base-stats-item">
-          <span class="base-stat-name">Defense</span>
-          <span class="base-stat-number">80</span>
-        </li>
-        <li class="base-stats-item">
-          <span class="base-stat-name">Special Attack</span>
-          <span class="base-stat-number">90</span>
-        </li>
-        <li class="base-stats-item">
-          <span class="base-stat-name">Special Defense</span>
-          <span class="base-stat-number">70</span>
-        </li>
-        <li class="base-stats-item">
-          <span class="base-stat-name">Speed</span>
-          <span class="base-stat-number">110</span>
-        </li>
-      </ul>
+    <div id="poke_stats${id}" class="stats-information">
+ 
     </div>
   </div>
 </div>`
@@ -252,4 +258,78 @@ function openStatsTab(event) {
 
 function removeDisplayNone() {
   document.getElementById('single_pokemon_card').classList.remove('d-none');
+}
+
+
+function renderStatsInfo(functions,id) {
+  let statsContainer = document.getElementById(`poke_stats${id}`);
+  statsContainer.innerHTML = ""
+  statsContainer.innerHTML = functions
+}
+
+function renderStatsInfoAtStart(id) {
+  let statsContainer = document.getElementById(`poke_stats${id}`);
+  statsContainer.innerHTML = ""
+  statsContainer.innerHTML = renderPokeStats()
+}
+
+function renderMoves(id)  {
+  let pokemon = loadedPokemon[id]
+return /*html*/`
+<span>${pokemon.moves[0].move.name}</span>
+<span>${pokemon.moves[1].move.name}</span>
+<span>${pokemon.moves[2].move.name}</span>
+<span>${pokemon.moves[3].move.name}</span>
+<span>${pokemon.moves[4].move.name}</span>
+<span>${pokemon.moves[5].move.name}</span>
+   `
+
+}
+
+function renderPokeStats(id) {
+return` hallo 2`
+}
+
+function renderAboutPokemon(id) {
+  return` hallo 3`
+}
+
+function loadAnimationSpinnerBtn() {
+  let animationContainer = document.getElementById('animation');
+  animationContainer.innerHTML = ""; 
+  document.getElementById('btn').classList.add('d-none');
+  document.getElementById('text_animation').classList.remove('d-none');
+  document.getElementById('load_more_span').classList.add('d-none');
+    animationContainer.innerHTML += `
+      <img class="loading-bg" src="./pokeballLoad.gif" alt="Loading Animation" class="loading-animation">
+    `;
+    animateText();
+  }
+
+
+function disableLoadingSpinnerAnimationBtn () {
+  let animationContainer = document.getElementById('animation');
+  animationContainer.innerHTML = "";
+  document.getElementById('btn').classList.remove('d-none')
+  document.getElementById('text_animation').classList.add('d-none')
+  document.getElementById('load_more_span').classList.remove('d-none');
+}
+
+
+const text = "gotta catch em all!";
+const interval = 75; // Intervall in Millisekunden
+
+function animateText() {
+  const container = document.getElementById('text_animation');
+  container.innerHTML = ""
+  // Funktion zur Anzeige eines Buchstabens nach einer Verzögerung
+  function showLetter(index) {
+      if (index < text.length) {
+          container.textContent += text[index];
+          setTimeout(() => showLetter(index + 1), interval);
+      }
+  }
+
+  // Start der Animation mit dem ersten Buchstaben
+  showLetter(0);
 }

@@ -22,7 +22,7 @@
         <div class="d-flex-space-btw">
           <h1>Pokédex</h1>
        
-          <input type="text" placeholder="Search.." id="search" onkeydown="searchPokemonName()"/>
+          <input type="text" placeholder="Search.." id="search" oninput="searchPokemonName()"/>
         </div>
       </nav>
     </header>
@@ -33,10 +33,19 @@
       </div>
     
       <div class="max-width">
-        <section id="main_content" class="main-content"></section>
+        <section id="main_content" class="main-content">
+        </section>
+        
       </div>
-    
-    <button onclick="loadMorePokemon()">Load</button>
+      
+      <div id="btn-container" class="btn-container">
+        <span id="load_more_span">Load more</span>
+        <img src="pokeball2.png" id="btn" onclick="loadMorePokemon()" alt="">
+      <div id="animation" class="btn">
+        
+      </div>
+      <div id="text_animation"></div>
+    </div>
 
   </body>
 </html>

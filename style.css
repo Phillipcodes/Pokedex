@@ -162,6 +162,8 @@ header {
     z-index: 100;
     border: solid black 3px;
     top: 50px;
+
+   
 }
 
 .name-and-id-line {
@@ -323,8 +325,46 @@ header {
     
 }
 
+.btn-container {
+    width: 100%;
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
+#btn {
+    cursor: pointer;
+    width: 125px;
+    height: 125px;
 
+}
+
+#btn img {
+    
+}
+
+#animation {
+  display: flex;
+  justify-content: center;
+
+}
+
+#animation img {
+    height: 125px;
+    width: 125px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#text_animation {
+    display: flex;
+    justify-content: center;
+    font-size: 26px;
+}
 
 @media screen and (max-width: 1600px) {
     .single-pokemon-card {
