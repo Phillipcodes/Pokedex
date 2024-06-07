@@ -2,6 +2,7 @@ let loadedPokemon = []; // Globale Variable zum Speichern der geladenen Pokémon
 let pokemonPackage = 0;
 let pokemonImg = [];
 let pokeImgGif = [];
+let currentPokemonNames = [];
 let lastRenderedIndex = 0;
 
 
@@ -10,7 +11,17 @@ let lastRenderedIndex = 0;
     loadingSpinner () 
    await getPokemonData();
    disableLoadingSpinner()
+   currentPokemonNames = loadedPokemon;
 
+}
+
+
+function searchPokemonName() {
+  let search = document.getElementById('search').value
+  search = search.toLowerCase();
+  let pokemonCard = document.getElementById('main_content');
+  pokemonCard.innerHTML = "";
+console.log(search);
 }
 
 async function getPokemonData() {
@@ -26,6 +37,7 @@ async function getPokemonData() {
       pokemonImg.push(baseImgUrl)
       pokeImgGif.push(baseGifUrl)
       loadedPokemon.push(pokemonData); // Pokémon zur Liste der geladenen Pokémon hinzufügen
+      currentPokemonNames.push(pokemonData.name)
     } catch (error) {
       console.log("Es ist ein Fehler aufgetreten.");
     }
@@ -40,12 +52,27 @@ async function getPokemonData() {
 
 function loadingSpinner () {
   document.getElementById('body').innerHTML += `
-    <div id="loading_spiner">hello world </div>`;
+   <div class="loading_spiner" id="loading_spiner"><img src="./loadin.gif">
+    <span>loading....</span>
+    gotta catch em all
+   </div>
+   `
+   if(loadedPokemon.length === 0) {
+    document.getElementById('header').classList.add('d-none')
+   }
+   
 
 }
 
 function disableLoadingSpinner() {
   document.getElementById('loading_spiner').classList.add('d-none')
+  document.getElementById('main_content').classList.remove('blur')
+  document.getElementById('header').classList.remove('blur')
+  document.getElementById('header').classList.add('d-none')
+  document.getElementById('header').classList.remove('d-none');
+  document.getElementById('single_card_background').classList.add('d-none');
+ 
+  
 }
 
 function renderPokemonData() {
@@ -89,12 +116,18 @@ function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pok
   </div>`;
 }
 
-function loadMorePokemon() {
-  getPokemonData(); // Weitere Pokémon laden
+ async function loadMorePokemon() {
+  loadingSinnerForLoadManually();
+ await getPokemonData(); // Weitere Pokémon laden
+ disableLoadingSpinner()
 
 }
 
+function loadingSinnerForLoadManually() {
+  document.getElementById('loading_spiner').classList.remove('d-none')
 
+  blurBackgroundLoadingSpinner();
+}
 
 function blurBackground () {
   document.getElementById('single_card_background').classList.remove('d-none');
@@ -103,11 +136,18 @@ function blurBackground () {
   document.getElementById('header').classList.add('blur');
 }
 
+function blurBackgroundLoadingSpinner () {
+  document.getElementById('single_card_background').classList.remove('d-none');
+  document.getElementById('main_content').classList.add('blur');
+  document.getElementById('header').classList.add('blur');
+ 
+}
+
+
 function openSinglePokemonCard(id) {
   document.getElementById('body').classList.add('no-scroll')
   renderSinglePokemonCard(id)
   blurBackground ()
-  
 }
 
 function renderSinglePokemonCard(id) {
@@ -115,9 +155,6 @@ function renderSinglePokemonCard(id) {
   let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1); 
   let pokeGif = pokeImgGif[id];
   let pokeyTypeBG = loadedPokemon[id].types[0].type.name;
-
- 
-
   document.getElementById('single_pokemon_card_container').innerHTML = renderSinglePokemonCardHTML(id,uppercasePokemonName, pokeGif,pokeyTypeBG)
 }
 
@@ -174,11 +211,12 @@ function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeGif,pokeTypeBa
   
 }
 
-function closePokemonCarrd() {
+function closePokemonCard() {
   document.getElementById('single_card_background').classList.add('d-none');
   document.getElementById('main_content').classList.remove('blur');
   document.getElementById('single_pokemon_card').classList.add('d-none')
   document.getElementById('header').classList.remove('blur');
+  document.getElementById('body').classList.remove('no-scroll');
 }
  
 
@@ -187,8 +225,12 @@ async function nextPokemon(id) {
     id = id + 1; // Erhöhe die ID, um das nächste Pokémon anzuzeigen
     openSinglePokemonCard(id);
   } else { // Wenn das Ende der geladenen Pokémon erreicht ist
+    loadingSinnerForLoadManually();
+    document.getElementById('single_pokemon_card').classList.add('d-none');
     await getPokemonData(); // Lade weitere Pokémon
     id = id + 1; // Inkrementiere die ID
+    disableLoadingSpinner();
+    removeDisplayNone();
     openSinglePokemonCard(id); // Öffne das nächste Pokémon
   }
 }
@@ -205,4 +247,9 @@ function previousPokemon(id) {
 
 function openStatsTab(event) {
   event.stopPropagation();
+}
+
+
+function removeDisplayNone() {
+  document.getElementById('single_pokemon_card').classList.remove('d-none');
 }

@@ -1,1 +1,8 @@
 zusatz aufgabe wenn pokedex fertig buttoons machen für 1. generation pokemon 2. generation 3 . genration retro version sprich bilder ändern sich in die retro version
+
+if else abfrage ujm anzuzeigen welche edition grade geladen werden soll und array length per button click setten auf 151 und lastrenderength dann bei ediiton 2 auf 151 setten und die length bis zu 2 editon und alles vorher mmit einer if else abfrage abfragen 
+
+button für shiny loabale varialbe isShiny = true mit if else abfrage abfragen wenn true wird das alte bild wiederangezeigt wenn false das shiny 
+
+
+fav icon : <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Roundicons Freebies - Flaticon</a>

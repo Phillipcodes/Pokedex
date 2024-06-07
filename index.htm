@@ -7,25 +7,27 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="PokeColorbackground.css" />
     <script src="scrips.js"></script>
+    <link rel="icon" type="image/x-icon" href="./icon/star.png">
     <title>Pokédex</title>
   </head>
   <body id="body" class="" onload="init()">
+
     <div
       id="single_card_background"
       class="single-card-background d-none"
-      onclick="closePokemonCarrd()"
+      onclick="closePokemonCard()"
     ></div>
     <header id="header">
       <nav>
         <div class="d-flex-space-btw">
           <h1>Pokédex</h1>
        
-          <input type="text" placeholder="Search.." />
+          <input type="text" placeholder="Search.." id="search" onkeydown="searchPokemonName()"/>
         </div>
       </nav>
     </header>
-    
-    
+
+     
       <div class="single-pokemon-card-container" id="single_pokemon_card_container">
      
       </div>
@@ -35,7 +37,7 @@
       </div>
     
     <button onclick="loadMorePokemon()">Load</button>
-    
+
   </body>
 </html>
 
