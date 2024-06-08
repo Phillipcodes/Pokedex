@@ -5,4 +5,7 @@ if else abfrage ujm anzuzeigen welche edition grade geladen werden soll und arra
 button für shiny loabale varialbe isShiny = true mit if else abfrage abfragen wenn true wird das alte bild wiederangezeigt wenn false das shiny 
 
 
+
+button für mehr pokkemon gleichzeitig lladen einfach button mit pokemonpackkage erhöhen und dann loadmore aufrufen
+
 fav icon : <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Roundicons Freebies - Flaticon</a>

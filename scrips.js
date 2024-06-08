@@ -1,8 +1,9 @@
 let loadedPokemon = []; // Globale Variable zum Speichern der geladenen Pokémon
 let pokemonPackage = 0;
 let pokemonImg = [];
-let pokeImgGif = [];
+let pokeImgShiny = [];
 let lastRenderedIndex = 0;
+let isShiny = false;
 
 async function init() {
   loadingSpinner();
@@ -22,11 +23,14 @@ function searchPokemonName() {
   mainContent.innerHTML = '';
   lastRenderedIndex = 0;
 
-  if(search === "") {
-    document.getElementById('btn-container').classList.remove('d-none')
-   
+  if (search === "") {
+    document.getElementById('btn-container').classList.remove('d-none');
+    mainContent.style.justifyContent = 'space-around';
+    mainContent.style.gap = '0';
+  } else {
+    mainContent.style.justifyContent = 'center';
+    mainContent.style.gap = '24px';
   }
-
   for (let z = 0; z < loadedPokemon.length; z++) {
     let pokemon = loadedPokemon[z];
     let pokemonName = pokemon.name;
@@ -48,28 +52,28 @@ function searchPokemonName() {
 }
 
 async function getPokemonData() {
-  for (let i = pokemonPackage +1 ; i < pokemonPackage +13; i++) {
+  for (let i = pokemonPackage +1 ; i < pokemonPackage +19; i++) {
     try {
       let pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
       let baseImgUrl =  await fetch (`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png`);
-      let baseGifUrl =  await fetch(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${i}.gif`);
+      let baseShinyUrl =  await fetch(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${i}.png`);
       if (!pokemonResponse.ok) {
         throw new Error("Something went wrong.");
       }
       let pokemonData = await pokemonResponse.json();
       pokemonImg.push(baseImgUrl)
-      pokeImgGif.push(baseGifUrl)
+      pokeImgShiny.push(baseShinyUrl)
       loadedPokemon.push(pokemonData); // Pokémon zur Liste der geladenen Pokémon hinzufügen
       
     } catch (error) {
       console.log("Es ist ein Fehler aufgetreten.");
     }
   }
+  pokemonPackage += 19;
 
   renderPokemonData()
   
-  pokemonPackage += 13;
-
+  
 }
 
 
@@ -144,6 +148,8 @@ function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pok
   `;
 }
 
+
+
  async function loadMorePokemon() {
   
   loadAnimationSpinnerBtn();
@@ -186,13 +192,13 @@ function openSinglePokemonCard(id) {
 function renderSinglePokemonCard(id) {
   let pokemonName = loadedPokemon[id].name;
   let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1); 
-  let pokeGif = pokemonImg[id];
+  let pokeImg = pokemonImg[id];
   let pokeyTypeBG = loadedPokemon[id].types[0].type.name;
-  document.getElementById('single_pokemon_card_container').innerHTML = renderSinglePokemonCardHTML(id,uppercasePokemonName, pokeGif,pokeyTypeBG)
+  document.getElementById('single_pokemon_card_container').innerHTML = renderSinglePokemonCardHTML(id,uppercasePokemonName, pokeImg,pokeyTypeBG)
  
 }
 
-function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeGif,pokeTypeBackground) {
+function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeImg,pokeTypeBackground) {
   let pokemon = loadedPokemon[id];
   let pokeTyps = pokemon.types
   let typeIcon = "";
@@ -212,15 +218,16 @@ function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeGif,pokeTypeBa
   </div>
   <div class="single-pokemon-card-img ${pokeTypeBackground}">
         <div onclick="previousPokemon(${id})" id="click-forward"> <</div>
-        <img src="${pokeGif.url}">
+        <img id="pokemon_image" src="${pokeImg.url}">
         <div onclick="nextPokemon(${id})" id="click-backward"> > </div>
       
   </div>
-  <div class="pokemon-stats-container ${pokeTypeBackground+"2"}">
+  <div class="pokemon-stats-container ">
     <div class="stat-line">
       <div  onclick="renderStatsInfo(renderPokeStats(${id}),${id})" onclick="openStatsTab(event)" id="close_up_info_btn_1">Stats</div>
       <div  onclick="renderStatsInfo(renderMoves(${id}),${id})" id="close_up_info_btn_2">Moves</div>
       <div  onclick="renderStatsInfo(renderAboutPokemon(${id}),${id})"id="close_up_info_btn_3">Info</div>
+      <div  onclick="renderShiny(${id})"id="close_up_info_btn_4">Shiny</div>
     </div>
     <div class="seperator"></div>
     <div id="poke_stats${id}" class="stats-information">
@@ -315,16 +322,38 @@ function renderAboutPokemon(id) {
 }
 function generateAboutPokemonHTML(pokeTyps,formattedHeight,formattedWeight) {
   let typesHTML = "";
+  let typeClass = pokeTyps[0].type.name;
   for (let i = 0; i < Math.min(pokeTyps.length, 3); i++) {
     let type = pokeTyps[i].type.name;
+    let typeClass = "";
     typesHTML += `<span class="${type}  center-type ">${type.charAt(0).toUpperCase() + type.slice(1)}</span>`;
-  }
+    
 
+  }
+  
   return` <ul class="pokemon-details">
-      <li><strong>Height:</strong> <span class="detail-value">${formattedHeight.toFixed(2)}</span><span class="unit">m</span></li>
-      <li><strong>Weight:</strong> <span class="detail-value">${formattedWeight.toFixed(2)}</span><span class="unit">kg</span></li>
+      <li><strong>Height:</strong> <span class="detail-value ${typeClass}2">${formattedHeight.toFixed(2)}</span><span class="unit">m</span></li>
+      <li><strong>Weight:</strong> <span class="detail-value ${typeClass}2">${formattedWeight.toFixed(2)}</span><span class="unit">kg</span></li>
     </ul>
       ${typesHTML}`
+}
+
+function renderShiny(id) {
+let shiny = pokeImgShiny[id].url;
+let normalImg = pokemonImg[id].url;
+let pokemonImage = document.getElementById('pokemon_image');
+
+if(isShiny === false) {
+pokemonImage.src = `${shiny}`
+isShiny = true;
+document.getElementById('close_up_info_btn_4').classList.add('button-color-after-press');
+}else {
+  pokemonImage.src = `${normalImg}`
+  isShiny = false
+  document.getElementById('close_up_info_btn_4').classList.remove('button-color-after-press');
+};
+
+
 }
 
 

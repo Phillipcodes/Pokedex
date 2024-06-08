@@ -269,6 +269,7 @@ header {
   list-style-type: none;
   display: flex;
     gap: 24px;
+    padding: 0;
  
 }
 
@@ -427,6 +428,12 @@ input {
     border: 2px solid #1803d8da;
     background-color: #ffffff;
   }
+
+.button-color-after-press {
+    background: red !important;
+    color: azure !important;
+    border: solid black 2.5px !important;
+}
 
 @media screen and (max-width: 1600px) {
     .single-pokemon-card {

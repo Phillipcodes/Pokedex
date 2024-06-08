@@ -239,76 +239,77 @@
   }
 
   .grass2 {
-    background-color: #567a38; /* Dunkleres Grün */
+    color: #567a38; /* Dunkleres Grün */
 }
 
 .fire2 {
-    background-color: #b85e1e; /* Dunkleres Orange */
+    color: #b85e1e; /* Dunkleres Orange */
 }
 
 .water2 {
-    background-color: #4c67a5; /* Dunkleres Blau */
+    color: #4c67a5; /* Dunkleres Blau */
 }
 
 .bug2 {
-    background-color: #727a13; /* Dunkleres Oliv */
+    color: #727a13; /* Dunkleres Oliv */
 }
 
 .normal2 {
-    background-color: #767658; /* Dunkleres Beige */
+    color: #767658; /* Dunkleres Beige */
 }
 
 .electric2 {
-    background-color: #bfa026; /* Dunkleres Gelb */
+    color: #bfa026; /* Dunkleres Gelb */
 }
 
 .poison2 {
-    background-color: #732d73; /* Dunkleres Lila */
+    color: #732d73; /* Dunkleres Lila */
 }
 
 .fairy2 {
-    background-color: #b87075; /* Dunkleres Pink */
+    color: #b87075; /* Dunkleres Pink */
 }
 
 .ground2 {
-    background-color: #a88a4a; /* Dunkleres Tan */
+    color: #a88a4a; /* Dunkleres Tan */
 }
 
 .fighting2 {
-    background-color: #8c211d; /* Dunkleres Rot */
+    color: #8c211d; /* Dunkleres Rot */
 }
 
 .psychic2 {
-    background-color: #b63a62; /* Dunkleres Pinkish */
+    color: #b63a62; /* Dunkleres Pinkish */
 }
 
 .rock2 {
-    background-color: #877628; /* Dunkleres Braun */
+    color: #877628; /* Dunkleres Braun */
 }
 
 .ghost2 {
-    background-color: #4d3b63; /* Dunkleres Purple-ish */
+    color: #4d3b63; /* Dunkleres Purple-ish */
 }
 
 .ice2 {
-    background-color: #649595; /* Dunkleres Hellblau */
+    color: #649595; /* Dunkleres Hellblau */
 }
 
 .dragon2 {
-    background-color: #4b22a0; /* Dunkleres Blau */
+    color: #4b22a0; /* Dunkleres Blau */
 }
 
 .dark2 {
-    background-color: #49362f; /* Dunkleres Dunkelbraun */
+    color: #49362f; /* Dunkleres Dunkelbraun */
 }
 
 .steel2 {
-    background-color: #7d7d93; /* Dunkleres Grau */
+    color: #7d7d93; /* Dunkleres Grau */
 }
 
 .flying2 {
-    background-color: #7460a2; /* Dunkleres Lavendel */
+    color: #7460a2; /* Dunkleres Lavendel */
 }
+
 
 .grass3 {
   background-color: #8cd664; /* Helleres Grün */
