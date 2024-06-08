@@ -38,8 +38,7 @@ h1 {
 }
 
 header {
-    background-color: rgb(77, 228, 228);
-    border-radius: 8px;
+    background-color: rgb(77, 228, 228);    
     margin-bottom: 5%;
     
   
@@ -79,7 +78,7 @@ header {
 .poke-type {
     border-radius: 8px;
    margin-bottom: 8px;
-   background-color: whitesmoke;
+   background-color: whitesmoke ;
    padding: 8px;
    height: 12px;
    width: 50px;
@@ -202,13 +201,13 @@ header {
 }
 
 .single-pokemon-card-img img  {
-    height: 55%;
-    width: 55%;
+    height: 70%;
+    width: auto;
 }
 
 .pokemon-stats-container {
     height: 45%;
-    background-color: orange;
+    background-color: white;
     border-top: solid 3px black;
 }
 
@@ -217,6 +216,15 @@ header {
     justify-content: space-around;
     padding-top: 16px;
     
+}
+
+.type-icon {
+    display: flex;
+}
+
+.type-icon img {
+    width: 25px;
+    height: 25px;
 }
 
 .stat-line div {
@@ -233,7 +241,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 90%;
+    width: 80%;
 }
 
 
@@ -246,7 +254,8 @@ header {
 
 .stats-information {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    flex-direction: column;
     padding-top: 16px;
     height: 71%;
     align-items: center;
@@ -254,10 +263,51 @@ header {
     font-weight: 600;
 }
 
-.stats-information ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+
+
+.pokemon-details {
+  list-style-type: none;
+  display: flex;
+    gap: 24px;
+ 
+}
+
+.pokemon-details > li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 28px;
+}
+
+.pokemon-details > li > strong {
+  min-width: 80px; /* Adjust width based on your needs */
+  display: inline-block;
+}
+
+.detail-value {
+  margin-left: 5px;
+  margin-right: 3px;
+}
+
+.unit {
+  margin-left: 3px;
+}
+
+.type-item {
+  margin-left: 20px;
+  list-style-type: disc;
+}
+
+.center-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 8px;
+    height: 20px;
+    width: 90px;
+    font-size: 28px;
 }
 
 .base-stats-item {
@@ -341,10 +391,6 @@ header {
 
 }
 
-#btn img {
-    
-}
-
 #animation {
   display: flex;
   justify-content: center;
@@ -366,8 +412,25 @@ header {
     font-size: 26px;
 }
 
+
+input {
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 6px;
+    font-size: 16px;
+    outline: none; 
+    border-radius: 10px;
+  }
+
+  /* Stil des Input-Felds, wenn es fokussiert ist */
+  input:focus {
+    border: 2px solid #1803d8da;
+    background-color: #ffffff;
+  }
+
 @media screen and (max-width: 1600px) {
     .single-pokemon-card {
         width: 45%;
     }
 }
+

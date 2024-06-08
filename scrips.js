@@ -17,12 +17,14 @@ function searchPokemonName() {
   let mainContent = document.getElementById("main_content");
 
   // Reset the content and the lastRenderedIndex
-  document.getElementById('btn').classList.add('d-none')
+  document.getElementById('btn-container').classList.add('d-none')
+  
   mainContent.innerHTML = '';
   lastRenderedIndex = 0;
 
   if(search === "") {
-    document.getElementById('btn').classList.remove('d-none')
+    document.getElementById('btn-container').classList.remove('d-none')
+   
   }
 
   for (let z = 0; z < loadedPokemon.length; z++) {
@@ -103,7 +105,7 @@ function renderPokemonData() {
   let mainContent = document.getElementById("main_content");
  
 
-  for (let z = lastRenderedIndex; z < loadedPokemon.length; z++) {
+  for (let z = lastRenderedIndex ; z < loadedPokemon.length; z++) {
     let pokemon = loadedPokemon[z];
     let pokemonName = pokemon.name;
     let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
@@ -124,9 +126,9 @@ function renderPokemonData() {
 }
 
 function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pokeTypeClass) {
-  
-  return `<div class="pokecard"  onclick="openSinglePokemonCard(${noneFormattedId})">
-    <div id="poke_name" class="poke-name center-text ${pokeTypeClass} ">
+
+  return `<div class="pokecard ${pokeTypeClass}"  onclick="openSinglePokemonCard(${noneFormattedId})">
+    <div id="poke_name" class="poke-name center-text  ">
       <div class="display-row">
         <h2>${pokeName}</h2>
         <div class="center-number">${id}</div>
@@ -150,8 +152,9 @@ function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pok
 
 }
 
-function loadingSinnerForLoadManually() {
+function loadingSpinnerForLoadManually() {
   document.getElementById('loading_spiner').classList.remove('d-none')
+  document.getElementById('btn-container').classList.add('d-none')
 
   blurBackgroundLoadingSpinner();
 }
@@ -183,17 +186,28 @@ function openSinglePokemonCard(id) {
 function renderSinglePokemonCard(id) {
   let pokemonName = loadedPokemon[id].name;
   let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1); 
-  let pokeGif = pokeImgGif[id];
+  let pokeGif = pokemonImg[id];
   let pokeyTypeBG = loadedPokemon[id].types[0].type.name;
   document.getElementById('single_pokemon_card_container').innerHTML = renderSinglePokemonCardHTML(id,uppercasePokemonName, pokeGif,pokeyTypeBG)
  
 }
 
 function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeGif,pokeTypeBackground) {
+  let pokemon = loadedPokemon[id];
+  let pokeTyps = pokemon.types
+  let typeIcon = "";
+  for (let i = 0; i < Math.min(pokeTyps.length, 3); i++) {
+    let type = pokeTyps[i].type.name;
+    typeIcon += `<div class="type-icon"><img src="./icon/${type}.png"></div>`;
+  }
+
+
   return /*html*/`  
   <div id="single_pokemon_card" class="single-pokemon-card d-none">
   <div class="name-and-id-line ${pokeTypeBackground+"3"}">
+    ${typeIcon}
     <div class="center-name">${uppercasePokemonName}</div>
+   
     <div class="round-background">${id+1}</div>
   </div>
   <div class="single-pokemon-card-img ${pokeTypeBackground}">
@@ -231,7 +245,7 @@ async function nextPokemon(id) {
     id = id + 1; // Erhöhe die ID, um das nächste Pokémon anzuzeigen
     openSinglePokemonCard(id);
   } else { // Wenn das Ende der geladenen Pokémon erreicht ist
-    loadingSinnerForLoadManually();
+    loadingSpinnerForLoadManually();
     document.getElementById('single_pokemon_card').classList.add('d-none');
     await getPokemonData(); // Lade weitere Pokémon
     id = id + 1; // Inkrementiere die ID
@@ -258,6 +272,7 @@ function openStatsTab(event) {
 
 function removeDisplayNone() {
   document.getElementById('single_pokemon_card').classList.remove('d-none');
+  document.getElementById('btn-container').classList.remove('d-none');
 }
 
 
@@ -274,16 +289,14 @@ function renderStatsInfoAtStart(id) {
 }
 
 function renderMoves(id)  {
-  let pokemon = loadedPokemon[id]
-return /*html*/`
-<span>${pokemon.moves[0].move.name}</span>
-<span>${pokemon.moves[1].move.name}</span>
-<span>${pokemon.moves[2].move.name}</span>
-<span>${pokemon.moves[3].move.name}</span>
-<span>${pokemon.moves[4].move.name}</span>
-<span>${pokemon.moves[5].move.name}</span>
-   `
+  let pokemon = loadedPokemon[id];
 
+  let movesHTML = "";
+  for (let i = 0; i < Math.min(pokemon.moves.length, 6); i++) {
+    let moves = pokemon.moves[i].move.name
+    movesHTML += `<span>${moves}</span>`;
+  }
+  return movesHTML;
 }
 
 function renderPokeStats(id) {
@@ -291,8 +304,30 @@ return` hallo 2`
 }
 
 function renderAboutPokemon(id) {
-  return` hallo 3`
+  let pokemon = loadedPokemon[id];
+  let pokeTyps = pokemon.types
+  let pokeHeight = pokemon.height;
+  let formattedHeight = pokeHeight / 10;
+  let pokeWeight = pokemon.weight;
+  let formattedWeight = pokeWeight / 10;
+ 
+ return generateAboutPokemonHTML(pokeTyps,formattedHeight,formattedWeight)
 }
+function generateAboutPokemonHTML(pokeTyps,formattedHeight,formattedWeight) {
+  let typesHTML = "";
+  for (let i = 0; i < Math.min(pokeTyps.length, 3); i++) {
+    let type = pokeTyps[i].type.name;
+    typesHTML += `<span class="${type}  center-type ">${type.charAt(0).toUpperCase() + type.slice(1)}</span>`;
+  }
+
+  return` <ul class="pokemon-details">
+      <li><strong>Height:</strong> <span class="detail-value">${formattedHeight.toFixed(2)}</span><span class="unit">m</span></li>
+      <li><strong>Weight:</strong> <span class="detail-value">${formattedWeight.toFixed(2)}</span><span class="unit">kg</span></li>
+    </ul>
+      ${typesHTML}`
+}
+
+
 
 function loadAnimationSpinnerBtn() {
   let animationContainer = document.getElementById('animation');
