@@ -442,3 +442,27 @@
 .font-bold {
     font-weight: bold;
 }
+
+.physical {
+  background-color: hsla(28, 42%, 40%, 0.863); /* Orange */
+}
+
+/* Klassen für spezielle Schadensklassen */
+.special {
+  background-color: hsla(271, 39%, 57%, 0.863); /* Lila */
+}
+
+/* Klassen für Status-Schadensklassen */
+.status {
+  background-color: hsla(120, 37%, 45%, 0.863); /* Grün */
+}
+
+/* Gemeinsame Eigenschaften für alle Klassen */
+.damage-class {
+ width: 70%;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  padding: 2px;
+  text-align: center;
+}

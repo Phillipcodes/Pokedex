@@ -4,7 +4,7 @@ let pokemonImg = [];
 let pokeImgShiny = [];
 let lastRenderedIndex = 0;
 let isShiny = false;
-
+let loadPokemonNumber = 19
 async function init() {
   loadingSpinner();
   await getPokemonData();
@@ -52,7 +52,7 @@ function searchPokemonName() {
 }
 
 async function getPokemonData() {
-  for (let i = pokemonPackage +1 ; i < pokemonPackage +19; i++) {
+  for (let i = pokemonPackage +1 ; i < pokemonPackage +loadPokemonNumber; i++) { // es liegt an der 19 das wenn ich pokemon package lade immer noch 19 angezigt werden ich müsste die 19 variable machen uum button zu ewrstellen die mehrer pokemon laden und pokemonpackage unten muss imer gleich das + im loop sein 
     try {
       let pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
       let baseImgUrl =  await fetch (`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png`);
@@ -69,7 +69,7 @@ async function getPokemonData() {
       console.log("Es ist ein Fehler aufgetreten.");
     }
   }
-  pokemonPackage += 19;
+  pokemonPackage += loadPokemonNumber;
 
   renderPokemonData()
   
@@ -230,7 +230,7 @@ function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeImg,pokeTypeBa
       <div  onclick="renderShiny(${id})"id="close_up_info_btn_4">Shiny</div>
     </div>
     <div class="seperator"></div>
-    <div id="poke_stats${id}" class="stats-information">
+    <div id="poke_stats${id}" class="stats-information ">
  
     </div>
   </div>
@@ -283,10 +283,11 @@ function removeDisplayNone() {
 }
 
 
-function renderStatsInfo(functions,id) {
+ async function renderStatsInfo(functions,id) {
   let statsContainer = document.getElementById(`poke_stats${id}`);
   statsContainer.innerHTML = ""
-  statsContainer.innerHTML = functions
+  let movesHTML = await functions
+  statsContainer.innerHTML = movesHTML
 }
 
 function renderStatsInfoAtStart(id) {
@@ -294,15 +295,35 @@ function renderStatsInfoAtStart(id) {
   statsContainer.innerHTML = ""
   statsContainer.innerHTML = renderPokeStats()
 }
+async function fetchMoveDetails(moveUrl) {
+  const response = await fetch(moveUrl);
+  const moveData = await response.json();
+  return moveData;
+}
 
-function renderMoves(id)  {
-  let pokemon = loadedPokemon[id];
 
-  let movesHTML = "";
-  for (let i = 0; i < Math.min(pokemon.moves.length, 6); i++) {
-    let moves = pokemon.moves[i].move.name
-    movesHTML += `<span>${moves}</span>`;
+
+function capitalizeMoveName(moveName) {
+  let words = moveName.split("-");
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
   }
+  return words.join("-");
+}
+
+async function renderMoves(id) {
+  let pokemon = loadedPokemon[id];
+  let movesHTML = "";
+
+  for (let i = 0; i < Math.min(pokemon.moves.length, 6); i++) {
+    let move = pokemon.moves[i].move;
+    let moveData = await fetchMoveDetails(move.url);
+
+    let moveName = capitalizeMoveName(move.name); // Formatieren des Namens des Moves
+    let damageClass = moveData.damage_class.name;
+    movesHTML += `<span class="${damageClass} damage-class">${moveName} (${damageClass.charAt(0).toUpperCase() + damageClass.slice(1)})</span>`;
+  }
+
   return movesHTML;
 }
 
@@ -396,4 +417,18 @@ function animateText() {
 
   // Start der Animation mit dem ersten Buchstaben
   showLetter(0);
+}
+
+
+function confirmNumber() {
+  // Die ausgewählte Zahl abrufen
+  let selectedNumber = parseInt(document.getElementById("number-select").value);
+  // Die Funktion mit der ausgewählten Zahl aufrufen
+  myFunction(selectedNumber);
+}
+
+// Beispiel-Funktion, die mit der ausgewählten Zahl aufgerufen wird
+function myFunction(number) {
+  loadPokemonNumber = number
+  document.getElementById('current-load-value').innerHTML = `<span> Current load value :  </span>  <div class="center-number">${number}</div>`
 }

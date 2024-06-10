@@ -19,14 +19,29 @@
     ></div>
     <header id="header">
       <nav>
+     
         <div class="d-flex-space-btw">
+          
           <h1>Pokédex</h1>
           <div>
-            
             <input type="text" placeholder="Search.." id="search" required oninput="searchPokemonName()"/>
           </div>
           
           
+        </div>
+      
+        <div id="number-selection">
+          <label for="number">Wähle eine Zahl:</label>
+          <select id="number-select">
+            <option value="19">Base</option>
+            <option value="32">32</option>
+            <option value="64">64</option>
+            <option value="1000">all</option>
+            
+            <!-- Weitere Optionen hier hinzufügen -->
+          </select>
+          <button onclick="confirmNumber()">Bestätigen</button>
+          <div id="current-load-value"></div>
         </div>
       </nav>
     </header>
@@ -45,12 +60,14 @@
       <div id="btn-container" class="btn-container">
         <span id="load_more_span">Load more</span>
         <img src="pokeball2.png" id="btn" onclick="loadMorePokemon()" alt="">
+        
+       
       <div id="animation" class="btn">
         
       </div>
       <div id="text_animation"></div>
     </div>
-
+    
   </body>
 </html>
 
