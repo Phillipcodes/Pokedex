@@ -47,6 +47,10 @@ label {
     gap: 12px;
 }
 
+#current-load-value-number {
+    font-size: 13px;
+}
+
 #number-selection button:hover{
     background-color: #2b2db5c5;
 }
@@ -503,6 +507,11 @@ input {
     display: block;
 }
 
+.chart-canvas {
+  width: 400px !important;
+  height: 400px !important;
+}
+
 @media screen and (max-width: 1600px) {
     .single-pokemon-card {
         width: 45%;
@@ -553,7 +562,9 @@ input {
         height: 50%;
     }
     
-
+    .d-flex-space-btw {
+        margin-bottom: 10px;
+    }
 
     header {
         height: 10%;
@@ -593,7 +604,16 @@ input {
     .single-pokemon-card {
        top: 10px;
     }
+    
+    #current-load-value {
+        font-size: 12px;
+        gap: 6px;
+    }
    
+    label {
+        font-size: 12px;
+    }
+
 }
 
 @media (max-width: 377px) {
@@ -626,3 +646,20 @@ input {
         font-size: 22px;
     }
 }
+
+
+.bar-container {
+    width: 200px; /* Breite der Bar */
+    height: 20px; /* Höhe der Bar */
+    background-color: #f0f0f0; /* Hintergrundfarbe der Bar */
+    border-radius: 10px; /* Runde Ecken für die Bar */
+    ; /* Platz unter der Bar */
+  }
+  
+  .filling {
+    height: 100%; /* Die Füllung hat die volle Höhe der Bar */
+    background-color: #007bff; /* Farbe der Füllung */
+    border-radius: 10px; /* Runde Ecken für die Füllung */
+    width: 0; /* Startbreite der Füllung */
+    transition: width 0.5s ease; /* Übergangseffekt für eine sanfte Animation */
+  }

@@ -207,7 +207,6 @@ function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeImg,pokeTypeBa
     typeIcon += `<div class="type-icon"><img src="./icon/${type}.png"></div>`;
   }
 
-
   return /*html*/`  
   <div id="single_pokemon_card" class="single-pokemon-card d-none">
   <div class="name-and-id-line ${pokeTypeBackground+"3"}">
@@ -293,7 +292,7 @@ function removeDisplayNone() {
 function renderStatsInfoAtStart(id) {
   let statsContainer = document.getElementById(`poke_stats${id}`);
   statsContainer.innerHTML = ""
-  statsContainer.innerHTML = renderPokeStats()
+  statsContainer.innerHTML = renderPokeStats(id)
 }
 async function fetchMoveDetails(moveUrl) {
   const response = await fetch(moveUrl);
@@ -328,7 +327,20 @@ async function renderMoves(id) {
 }
 
 function renderPokeStats(id) {
-return` hallo 2`
+   let pokemon = loadedPokemon[id];  
+    let result = "";
+for(let k = 0; k < pokemon.stats.length; k++) {
+  let  statValue = pokemon.stats[k].base_stat
+  let  calcPercent = statValue * 100 /255
+  let statName = pokemon.stats[k].stat.name
+  result += ` <div>
+         ${statName} <div class="bar-container">
+          <div id="filling${k}" class="filling" style="width: ${calcPercent}%">${statValue}</div>
+          </div>
+          </div>`
+          
+}
+return result;
 }
 
 function renderAboutPokemon(id) {
@@ -424,11 +436,19 @@ function confirmNumber() {
   // Die ausgewählte Zahl abrufen
   let selectedNumber = parseInt(document.getElementById("number-select").value);
   // Die Funktion mit der ausgewählten Zahl aufrufen
-  myFunction(selectedNumber);
+  setLoadNumber(selectedNumber);
 }
 
 // Beispiel-Funktion, die mit der ausgewählten Zahl aufgerufen wird
-function myFunction(number) {
+function setLoadNumber(number) {
   loadPokemonNumber = number
-  document.getElementById('current-load-value').innerHTML = `<span> Current load value :  </span>  <div class="center-number">${number}</div>`
-}
+  if(number === 1000) {
+    document.getElementById('current-load-value-number').innerHTML = "all"
+  }else if (number === 19) {
+    document.getElementById('current-load-value-number').innerHTML = "Base"
+  }else {
+    document.getElementById('current-load-value-number').innerHTML = number
+  }
+ 
+  }
+  
