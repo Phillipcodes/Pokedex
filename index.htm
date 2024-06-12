@@ -11,6 +11,7 @@
     <title>Pokédex</title>
   </head>
   <body id="body" class="" onload="init()">
+    <div class="body-mobile">
 
     <div
       id="single_card_background"
@@ -31,18 +32,18 @@
         </div>
       
         <div id="number-selection">
-          <label for="number">Choose a number:</label>
+          <div class="label" for="number">Choose a number:</div>
           <select id="number-select">
             <option value="19">Base</option>
-            <option value="32">32</option>
-            <option value="64">64</option>
-            <option value="1000">all</option>
+            <option value="33">32</option>
+            <option value="65">64</option>
+            <option value="1001">all</option>
             
             <!-- Weitere Optionen hier hinzufügen -->
           </select>
           <button onclick="confirmNumber()">Bestätigen</button>
           <div id="current-load-value">
-            <span> Current load value :  </span>  <div class="center-number" id="current-load-value-number">19</div>
+            <span> Current load value :  </span>  <div class="center-number" id="current-load-value-number">Base</div>
           </div>
         </div>
       </nav>
@@ -60,15 +61,20 @@
       </div>
       
       <div id="btn-container" class="btn-container">
-        <span id="load_more_span">Load more</span>
-        <img src="pokeball2.png" id="btn" onclick="loadMorePokemon()" alt="">
-        
-       
-      <div id="animation" class="btn">
-        
+        <div class="btn-container-child">
+        <div class="loading_spiner_Btn"><span id="load_more_span">Load more</span>
+          <img src="pokeball2.png" id="btn" onclick="loadMorePokemon()" alt="">
+        <div id="animation" class="btn">
+        </div>
+        <div id="text_animation"></div></div>
+        <div class="anchor">
+          <a href="#header">
+       <img  src="./icon/arrowup.png" alt="">
+      </a>
       </div>
-      <div id="text_animation"></div>
     </div>
+    </div>
+  </div>
     
   </body>
 </html>

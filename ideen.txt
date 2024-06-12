@@ -9,3 +9,13 @@ button für shiny loabale varialbe isShiny = true mit if else abfrage abfragen w
 button für mehr pokkemon gleichzeitig lladen einfach button mit pokemonpackkage erhöhen und dann loadmore aufrufen
 
 fav icon : <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Roundicons Freebies - Flaticon</a>
+
+arrow icon ID 160925295
+© Colorguru2020
+| Dreamstime.com
+
+ schauen ob ich die moves vorher in ein array gepusht bekomme damit ich nicht auf sie warten muss wegen der zeit bis sie angezeigt werden
+
+
+
+ um die moves bereits in ein array zu pushen klönnte ihc einfach die vorschleife in der function die ich auch bei fetch verwende in die function schreiben mit den selben variablen und einfach immer bei loading neuer pokemmon aufrufen so das gewehrleistet wird das die neuen moves alle da sind. 

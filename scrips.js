@@ -2,9 +2,13 @@ let loadedPokemon = []; // Globale Variable zum Speichern der geladenen Pokémon
 let pokemonPackage = 0;
 let pokemonImg = [];
 let pokeImgShiny = [];
+let moveDataCache = []
 let lastRenderedIndex = 0;
 let isShiny = false;
 let loadPokemonNumber = 19
+let statusBtn = 0
+
+
 async function init() {
   loadingSpinner();
   await getPokemonData();
@@ -12,44 +16,61 @@ async function init() {
 
 }
 
+function styleAfterSearch(mainContent) {
+  document.getElementById('btn-container').classList.remove('d-none');
+  mainContent.style.justifyContent = 'space-around';
+  mainContent.style.gap = '0';
+}
+
 function searchPokemonName() {
-  let search = document.getElementById('search').value;
-  search = search.toLowerCase();
+  let search = document.getElementById('search').value.toLowerCase();
   let mainContent = document.getElementById("main_content");
 
-  // Reset the content and the lastRenderedIndex
-  document.getElementById('btn-container').classList.add('d-none')
-  
-  mainContent.innerHTML = '';
-  lastRenderedIndex = 0;
-
-  if (search === "") {
-    document.getElementById('btn-container').classList.remove('d-none');
-    mainContent.style.justifyContent = 'space-around';
-    mainContent.style.gap = '0';
+  if (search.length < 3) {
+    if (search.length <= 2) {
+      resetSearch(mainContent);
+      renderPokemonData(); // Render the original data if search input is empty
+      styleAfterSearch(mainContent);
+    }
+     
+    
   } else {
+    resetSearch(mainContent); // Reset only if search length is 3 or more
     mainContent.style.justifyContent = 'center';
     mainContent.style.gap = '24px';
+    filterAndRenderPokemon(search, mainContent);
   }
-  for (let z = 0; z < loadedPokemon.length; z++) {
-    let pokemon = loadedPokemon[z];
-    let pokemonName = pokemon.name;
-    let uppercasePokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
-    let pokeTypesHTML = "";
-    
-    if (pokemonName.toLowerCase().startsWith(search)) {
-      for (let j = 0; j < pokemon.types.length; j++) {
-        let pokeType = pokemon.types[j].type.name;
-        let uppercasePokeType = pokeType.charAt(0).toUpperCase() + pokeType.slice(1);
-        pokeTypesHTML += `<span class="poke-type ${pokeType}1 center-text font-bold">${uppercasePokeType}</span> `;
-      }
-      let pokeTypeClass = pokemon.types[0].type.name;
-      let pokeHtml = renderPokemonDataHTML(uppercasePokemonName, z + 1, z, pokeTypesHTML, pokeTypeClass);
-      mainContent.innerHTML += pokeHtml;
-    }
-  }
-  lastRenderedIndex = loadedPokemon.length;
 }
+
+function resetSearch(mainContent) {
+  document.getElementById('btn-container').classList.add('d-none');
+  mainContent.innerHTML = '';
+  lastRenderedIndex = 0;
+}
+
+function filterAndRenderPokemon(search, mainContent) {
+  if (search.length >= 3) {
+    for (let z = 0; z < loadedPokemon.length; z++) {
+      let pokemon = loadedPokemon[z];
+      let pokemonName = pokemon.name.toLowerCase();
+      let uppercasePokemonName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+      let pokeTypesHTML = "";
+
+      if (pokemonName.includes(search)) {
+        for (let j = 0; j < pokemon.types.length; j++) {
+          let pokeType = pokemon.types[j].type.name;
+          let uppercasePokeType = pokeType.charAt(0).toUpperCase() + pokeType.slice(1);
+          pokeTypesHTML += `<span class="poke-type ${pokeType}1 center-text font-bold">${uppercasePokeType}</span> `;
+        }
+        let pokeTypeClass = pokemon.types[0].type.name;
+        let pokeHtml = renderPokemonDataHTML(uppercasePokemonName, z + 1, z, pokeTypesHTML, pokeTypeClass);
+        mainContent.innerHTML += pokeHtml;
+      }
+    }
+    lastRenderedIndex = loadedPokemon.length;
+  }
+}
+
 
 async function getPokemonData() {
   for (let i = pokemonPackage +1 ; i < pokemonPackage +loadPokemonNumber; i++) { // es liegt an der 19 das wenn ich pokemon package lade immer noch 19 angezigt werden ich müsste die 19 variable machen uum button zu ewrstellen die mehrer pokemon laden und pokemonpackage unten muss imer gleich das + im loop sein 
@@ -64,16 +85,12 @@ async function getPokemonData() {
       pokemonImg.push(baseImgUrl)
       pokeImgShiny.push(baseShinyUrl)
       loadedPokemon.push(pokemonData); // Pokémon zur Liste der geladenen Pokémon hinzufügen
-      
     } catch (error) {
       console.log("Es ist ein Fehler aufgetreten.");
     }
   }
   pokemonPackage += loadPokemonNumber;
-
   renderPokemonData()
-  
-  
 }
 
 
@@ -180,11 +197,20 @@ function blurBackgroundLoadingSpinner () {
 }
 
 
-function openSinglePokemonCard(id) {
+  function openSinglePokemonCard(id) {
   document.getElementById('body').classList.add('no-scroll')
+  preLoadMoves(id)
   renderSinglePokemonCard(id)
   blurBackground ()
-  renderStatsInfoAtStart(id)
+  
+  if(statusBtn === 1) {
+  rendermovesInfoAtStart(id)
+  }if(statusBtn === 2) {
+    renderAboutInfoAtStart(id)
+  }else {
+    renderStatsInfoAtStart(id)
+  }
+ 
   
   
 }
@@ -243,6 +269,7 @@ function closePokemonCard() {
   document.getElementById('single_pokemon_card').classList.add('d-none')
   document.getElementById('header').classList.remove('blur');
   document.getElementById('body').classList.remove('no-scroll');
+  statusBtn = 0
 }
  
 
@@ -287,6 +314,7 @@ function removeDisplayNone() {
   statsContainer.innerHTML = ""
   let movesHTML = await functions
   statsContainer.innerHTML = movesHTML
+
 }
 
 function renderStatsInfoAtStart(id) {
@@ -294,12 +322,43 @@ function renderStatsInfoAtStart(id) {
   statsContainer.innerHTML = ""
   statsContainer.innerHTML = renderPokeStats(id)
 }
-async function fetchMoveDetails(moveUrl) {
-  const response = await fetch(moveUrl);
-  const moveData = await response.json();
-  return moveData;
+
+function renderAboutInfoAtStart(id) {
+  let statsContainer = document.getElementById(`poke_stats${id}`);
+  statsContainer.innerHTML = ""
+  statsContainer.innerHTML = renderAboutPokemon(id)
 }
 
+ async function rendermovesInfoAtStart(id) {
+  let statsContainer = document.getElementById(`poke_stats${id}`);
+  statsContainer.innerHTML = ""
+  statsContainer.innerHTML =  await renderMoves(id)
+}
+
+async function fetchMoveDetails(moveUrl) {
+  // Überprüfen, ob die Daten bereits im Cache vorhanden sind
+  if (moveDataCache[moveUrl]) {
+    return moveDataCache[moveUrl];
+  } else {
+    // Falls nicht, Fetch-Aufruf durchführen und Daten im Cache speichern
+    const response = await fetch(moveUrl);
+    const moveData = await response.json();
+    moveDataCache[moveUrl] = moveData;
+    return moveData;
+  }
+}
+
+ async function preLoadMoves(id) {
+  let pokemon = loadedPokemon[id];
+
+
+  for (let i = 0; i < Math.min(pokemon.moves.length, 6); i++) {
+    let move = pokemon.moves[i].move;
+    let moveData = await fetchMoveDetails(move.url);
+    
+  }
+ 
+}
 
 
 function capitalizeMoveName(moveName) {
@@ -322,25 +381,40 @@ async function renderMoves(id) {
     let damageClass = moveData.damage_class.name;
     movesHTML += `<span class="${damageClass} damage-class">${moveName} (${damageClass.charAt(0).toUpperCase() + damageClass.slice(1)})</span>`;
   }
-
+  statusBtn = 1;
   return movesHTML;
 }
 
 function renderPokeStats(id) {
-   let pokemon = loadedPokemon[id];  
-    let result = "";
-for(let k = 0; k < pokemon.stats.length; k++) {
-  let  statValue = pokemon.stats[k].base_stat
-  let  calcPercent = statValue * 100 /255
-  let statName = pokemon.stats[k].stat.name
-  result += ` <div>
-         ${statName} <div class="bar-container">
-          <div id="filling${k}" class="filling" style="width: ${calcPercent}%">${statValue}</div>
+  let pokemon = loadedPokemon[id];  
+  let result = "";
+  for (let k = 0; k < pokemon.stats.length; k++) {
+    let statValue = pokemon.stats[k].base_stat;
+    let calcPercent = statValue * 100 / 255;
+    let statNames = pokemon.stats[k].stat.name;
+    let statName = capitalizeMoveName(statNames);
+
+    // Erzeugen der HTML-Struktur mit anfänglicher Breite 0
+    result += `
+      <div class="table-wrapper">
+        <div class="table-row">
+          <div class="bar-stat-name">${statName}</div>
+          <div class="bar-container">
+            <div id="filling${id}+${k}" class="filling" style="width: 0">${statValue}</div>
           </div>
-          </div>`
-          
-}
-return result;
+        </div>
+      </div>`;
+      
+    // Setzen der Breite nach einer kurzen Verzögerung
+    setTimeout(() => {
+      let fillingElement = document.getElementById(`filling${id}+${k}`);
+      if (fillingElement) {
+        fillingElement.style.width = `${calcPercent}%`;
+      }
+    }, 50);
+  }
+  statusBtn = 0;
+  return result;
 }
 
 function renderAboutPokemon(id) {
@@ -351,6 +425,7 @@ function renderAboutPokemon(id) {
   let pokeWeight = pokemon.weight;
   let formattedWeight = pokeWeight / 10;
  
+  statusBtn = 2
  return generateAboutPokemonHTML(pokeTyps,formattedHeight,formattedWeight)
 }
 function generateAboutPokemonHTML(pokeTyps,formattedHeight,formattedWeight) {
@@ -442,12 +517,12 @@ function confirmNumber() {
 // Beispiel-Funktion, die mit der ausgewählten Zahl aufgerufen wird
 function setLoadNumber(number) {
   loadPokemonNumber = number
-  if(number === 1000) {
+  if(number === 1001) {
     document.getElementById('current-load-value-number').innerHTML = "all"
   }else if (number === 19) {
     document.getElementById('current-load-value-number').innerHTML = "Base"
   }else {
-    document.getElementById('current-load-value-number').innerHTML = number
+    document.getElementById('current-load-value-number').innerHTML = number -1
   }
  
   }
