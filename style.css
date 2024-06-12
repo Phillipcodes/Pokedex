@@ -29,7 +29,11 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    
+    padding-bottom: 8px;
+}
+
+.padding {
+    padding-top: 8px;
 }
 
 #number-selection span {
@@ -83,6 +87,7 @@ body {
 .max-width {
     margin: auto;
     max-width: 1920px;
+    padding: 0 13px;
 }
 
 .d-flex-space-btw {
@@ -100,7 +105,7 @@ h1 {
 
 header {
     background-color: rgb(77, 228, 228);    
-    margin-bottom: 5%;
+    margin-bottom: 9%;
     height: 22%;
   
 }
@@ -175,7 +180,7 @@ header {
 }
 
 .pokecard:hover {
-    transform: scale(1.2);
+    transform: scale(1.12);
 }
 
 .poke-name h2 {
@@ -414,11 +419,13 @@ header {
 #click-forward {
     font-size: 34px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 #click-backward {
     font-size: 34px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 
@@ -586,7 +593,7 @@ input {
 
 @media screen and (max-width: 1600px) {
     .single-pokemon-card {
-        width: 47%;
+        width: 55%;
     }
 }
 
@@ -622,6 +629,13 @@ input {
     }
 }
 
+@media (max-width: 790px ) {
+    .single-pokemon-card-img img {
+       
+        height: 70%;
+    }
+}
+
 @media (max-width: 600px ) {
     .pokecard {
         width: 40%;
@@ -631,7 +645,7 @@ input {
     }
 
     .single-pokemon-card img {
-        height: 50%;
+        height: 55%;
     }
     
     .d-flex-space-btw {
@@ -643,7 +657,7 @@ input {
     }
 
     header {
-        height: 10%;
+        height: 20%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -656,17 +670,24 @@ input {
     .stats-information {
         font-size: 20px;
     }
-}
 
-@media (max-width: 570px) {
     .pokemon-details > li {
         flex-direction: column;
 }
 
+@media (max-width: 587px) {
+    
 }
-@media (max-width: 480px) {
+#number-selection {
+    padding-left: 8px;
+    flex-direction: column;
+}
+
+}
+@media (max-width: 500px) {
     .single-pokemon-card img {
         height: 45%;
+       
     }
     
     .single-pokemon-card {
@@ -697,10 +718,20 @@ input {
     .label {
         font-size: 12px;
     }
+    .single-pokemon-card img {
+        height: 40%;
+    }
 
+   
 }
 
 @media (max-width: 377px) {
+
+    .single-pokemon-card img {
+        height: 38%;
+       
+    }
+
     .single-pokemon-card {
         width: 85%;
     }
@@ -724,16 +755,14 @@ input {
     }
 
     .single-pokemon-card-img {
-        height: 42%;
+        height: 38%;
     }
 
     .pokemon-stats-container {
         height: 56%;
     }
 
-    .stats-information {
-        font-size: 22px;
-    }
+    
 }
     
 

@@ -24,7 +24,7 @@
         <div class="d-flex-space-btw">
           
           <h1>Pokédex</h1>
-          <div>
+          <div class="padding">
             <input type="text" placeholder="Search.." id="search" required oninput="searchPokemonName()"/>
           </div>
           
@@ -41,9 +41,9 @@
             
            
           </select>
-          <button onclick="confirmNumber()">Bestätigen</button>
+          <button onclick="confirmNumber()">Confirm</button>
           <div id="current-load-value">
-            <span> Current load value :  </span>  <div class="center-number" id="current-load-value-number">Base</div>
+            <span> Current load value :  </span>  <div class="center-number" id="current-load-value-number">Base</div> <span id="estimated_load_time"> Estimated load time: 5-15 seconds~</span>
           </div>
         </div>
       </nav>

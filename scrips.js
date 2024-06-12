@@ -33,7 +33,6 @@ function searchPokemonName() {
       styleAfterSearch(mainContent);
     }
      
-    
   } else {
     resetSearch(mainContent); // Reset only if search length is 3 or more
     mainContent.style.justifyContent = 'center';
@@ -71,7 +70,6 @@ function filterAndRenderPokemon(search, mainContent) {
   }
 }
 
-
 async function getPokemonData() {
   for (let i = pokemonPackage +1 ; i < pokemonPackage +loadPokemonNumber; i++) { // es liegt an der 19 das wenn ich pokemon package lade immer noch 19 angezigt werden ich müsste die 19 variable machen uum button zu ewrstellen die mehrer pokemon laden und pokemonpackage unten muss imer gleich das + im loop sein 
     try {
@@ -92,7 +90,6 @@ async function getPokemonData() {
   pokemonPackage += loadPokemonNumber;
   renderPokemonData()
 }
-
 
 function loadingSpinner () {
   document.getElementById('body').innerHTML += `
@@ -147,7 +144,6 @@ function renderPokemonData() {
 }
 
 function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pokeTypeClass) {
-
   return `<div class="pokecard ${pokeTypeClass}"  onclick="openSinglePokemonCard(${noneFormattedId})">
     <div id="poke_name" class="poke-name center-text  ">
       <div class="display-row">
@@ -164,8 +160,6 @@ function renderPokemonDataHTML(pokeName,  id, noneFormattedId, pokeTypesHTML,pok
   </div>
   `;
 }
-
-
 
  async function loadMorePokemon() {
   
@@ -195,7 +189,6 @@ function blurBackgroundLoadingSpinner () {
   document.getElementById('header').classList.add('blur');
  
 }
-
 
   function openSinglePokemonCard(id) {
   document.getElementById('body').classList.add('no-scroll')
@@ -260,7 +253,6 @@ function renderSinglePokemonCardHTML(id ,uppercasePokemonName,pokeImg,pokeTypeBa
     </div>
   </div>
 </div>`
-  
 }
 
 function closePokemonCard() {
@@ -271,7 +263,6 @@ function closePokemonCard() {
   document.getElementById('body').classList.remove('no-scroll');
   statusBtn = 0
 }
- 
 
 async function nextPokemon(id) {
   if (id < loadedPokemon.length - 1) { // Wenn es ein nächstes Pokémon gibt
@@ -302,12 +293,10 @@ function openStatsTab(event) {
   event.stopPropagation();
 }
 
-
 function removeDisplayNone() {
   document.getElementById('single_pokemon_card').classList.remove('d-none');
   document.getElementById('btn-container').classList.remove('d-none');
 }
-
 
  async function renderStatsInfo(functions,id) {
   let statsContainer = document.getElementById(`poke_stats${id}`);
@@ -351,15 +340,12 @@ async function fetchMoveDetails(moveUrl) {
  async function preLoadMoves(id) {
   let pokemon = loadedPokemon[id];
 
-
   for (let i = 0; i < Math.min(pokemon.moves.length, 6); i++) {
     let move = pokemon.moves[i].move;
     let moveData = await fetchMoveDetails(move.url);
     
   }
- 
 }
-
 
 function capitalizeMoveName(moveName) {
   let words = moveName.split("-");
@@ -393,18 +379,7 @@ function renderPokeStats(id) {
     let calcPercent = statValue * 100 / 255;
     let statNames = pokemon.stats[k].stat.name;
     let statName = capitalizeMoveName(statNames);
-
-    // Erzeugen der HTML-Struktur mit anfänglicher Breite 0
-    result += `
-      <div class="table-wrapper">
-        <div class="table-row">
-          <div class="bar-stat-name">${statName}</div>
-          <div class="bar-container">
-            <div id="filling${id}+${k}" class="filling" style="width: 0">${statValue}</div>
-          </div>
-        </div>
-      </div>`;
-      
+    result +=generateStatHTML(id,k,statName,statValue)
     // Setzen der Breite nach einer kurzen Verzögerung
     setTimeout(() => {
       let fillingElement = document.getElementById(`filling${id}+${k}`);
@@ -417,6 +392,18 @@ function renderPokeStats(id) {
   return result;
 }
 
+function generateStatHTML(id, k, statName, statValue) {
+  return `
+    <div class="table-wrapper">
+      <div class="table-row">
+        <div class="bar-stat-name">${statName}</div>
+        <div class="bar-container">
+          <div id="filling${id}+${k}" class="filling" style="width: 0">${statValue}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderAboutPokemon(id) {
   let pokemon = loadedPokemon[id];
   let pokeTyps = pokemon.types
@@ -424,7 +411,6 @@ function renderAboutPokemon(id) {
   let formattedHeight = pokeHeight / 10;
   let pokeWeight = pokemon.weight;
   let formattedWeight = pokeWeight / 10;
- 
   statusBtn = 2
  return generateAboutPokemonHTML(pokeTyps,formattedHeight,formattedWeight)
 }
@@ -438,7 +424,6 @@ function generateAboutPokemonHTML(pokeTyps,formattedHeight,formattedWeight) {
     
 
   }
-  
   return` <ul class="pokemon-details">
       <li><strong>Height:</strong> <span class="detail-value ${typeClass}2">${formattedHeight.toFixed(2)}</span><span class="unit">m</span></li>
       <li><strong>Weight:</strong> <span class="detail-value ${typeClass}2">${formattedWeight.toFixed(2)}</span><span class="unit">kg</span></li>
@@ -450,7 +435,6 @@ function renderShiny(id) {
 let shiny = pokeImgShiny[id].url;
 let normalImg = pokemonImg[id].url;
 let pokemonImage = document.getElementById('pokemon_image');
-
 if(isShiny === false) {
 pokemonImage.src = `${shiny}`
 isShiny = true;
@@ -460,11 +444,7 @@ document.getElementById('close_up_info_btn_4').classList.add('button-color-after
   isShiny = false
   document.getElementById('close_up_info_btn_4').classList.remove('button-color-after-press');
 };
-
-
 }
-
-
 
 function loadAnimationSpinnerBtn() {
   let animationContainer = document.getElementById('animation');
@@ -478,7 +458,6 @@ function loadAnimationSpinnerBtn() {
     animateText();
   }
 
-
 function disableLoadingSpinnerAnimationBtn () {
   let animationContainer = document.getElementById('animation');
   animationContainer.innerHTML = "";
@@ -486,7 +465,6 @@ function disableLoadingSpinnerAnimationBtn () {
   document.getElementById('text_animation').classList.add('d-none')
   document.getElementById('load_more_span').classList.remove('d-none');
 }
-
 
 const text = "gotta catch em all!";
 const interval = 75; // Intervall in Millisekunden
@@ -501,11 +479,9 @@ function animateText() {
           setTimeout(() => showLetter(index + 1), interval);
       }
   }
-
   // Start der Animation mit dem ersten Buchstaben
   showLetter(0);
 }
-
 
 function confirmNumber() {
   // Die ausgewählte Zahl abrufen
@@ -513,17 +489,18 @@ function confirmNumber() {
   // Die Funktion mit der ausgewählten Zahl aufrufen
   setLoadNumber(selectedNumber);
 }
-
 // Beispiel-Funktion, die mit der ausgewählten Zahl aufgerufen wird
 function setLoadNumber(number) {
   loadPokemonNumber = number
   if(number === 1001) {
     document.getElementById('current-load-value-number').innerHTML = "all"
+    document.getElementById('estimated_load_time').innerHTML = "Estimated load time: 5-10 minutes~"
   }else if (number === 19) {
     document.getElementById('current-load-value-number').innerHTML = "Base"
+      document.getElementById('estimated_load_time').innerHTML = "Estimated load time: 5-15 seconds~"
   }else {
     document.getElementById('current-load-value-number').innerHTML = number -1
+      document.getElementById('estimated_load_time').innerHTML = "Estimated load time: 15-45 seconds~"
   }
- 
   }
   
